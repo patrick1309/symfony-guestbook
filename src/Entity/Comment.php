@@ -38,6 +38,13 @@ class Comment
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $photoFilename;
 
+    public function __construct()
+    {
+        if (!$this->getCreatedAt()) {
+            $this->setCreatedAtValue();
+        }
+    }
+
     public function __toString()
     {
         return (string) $this->email;

@@ -27,12 +27,14 @@ class Conference
     #[ORM\OneToMany(mappedBy: 'conference', targetEntity: Comment::class, orphanRemoval: true)]
     private $comments;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $photoFilename;
-
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->city.' '.$this->year;
     }
 
     public function getId(): ?int
@@ -102,18 +104,6 @@ class Conference
                 $comment->setConference(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPhotoFilename(): ?string
-    {
-        return $this->photoFilename;
-    }
-
-    public function setPhotoFilename(?string $photoFilename): self
-    {
-        $this->photoFilename = $photoFilename;
 
         return $this;
     }

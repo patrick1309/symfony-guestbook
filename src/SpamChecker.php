@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Entity\Comment;
+use App\Service\AsyncCallService;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SpamChecker

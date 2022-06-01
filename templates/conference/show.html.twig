@@ -13,7 +13,7 @@
                 <img src="{{ asset('uploads/photos/' ~ comment.photofilename) }}" />
             {% endif %}
 
-            <h4>{{ comment.author }}</h4>
+            <h4>{{ comment.author }} ({{comment.email}})</h4>
             <small>
                 {{ comment.createdAt|format_datetime('medium', 'short') }}
             </small>

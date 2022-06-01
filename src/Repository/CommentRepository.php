@@ -58,21 +58,23 @@ class CommentRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Comment
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   public function findOneByEmail(string $email): ?Comment
+   {
+       return $this->createQueryBuilder('c')
+           ->andWhere('c.email = :email')
+           ->setParameter('email', $email)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
 
     public function getCommentPaginator(Conference $conference, int $offset): Paginator
     {
         $query = $this->createQueryBuilder('c')
             ->andWhere('c.conference = :conference')
             ->setParameter('conference', $conference)
+            ->andWhere('c.state = :state')
+            ->setParameter('state', 'published')
             ->orderBy('c.createdAt', 'DESC')
             ->setMaxResults(self::PAGINATOR_PER_PAGE)
             ->setFirstResult($offset)

@@ -39,6 +39,7 @@ mounts:
 
 relationships:
     database: "database:postgresql"
+    redis: "rediscache:redis"
     
 hooks:
     build: |

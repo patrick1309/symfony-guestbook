@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
@@ -43,7 +44,8 @@ class AdminController extends AbstractController
         $this->em->flush();
 
         if ($accepted) {
-            $this->bus->dispatch(new CommentMessage($comment->getId()));
+            $reviewUrl = $this->generateUrl('review_comment', ['id' => $comment->getId()],UrlGeneratorInterface::ABSOLUTE_URL);
+            $this->bus->dispatch(new CommentMessage($comment->getId(), $reviewUrl));
         }
 
         return $this->render('admin/review.html.twig', [

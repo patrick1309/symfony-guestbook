@@ -19,7 +19,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    const PAGINATOR_PER_PAGE = 2;
+    const PAGINATOR_PER_PAGE = 10;
     private $commentsDaysBeforeRejectedREmoval;
 
     public function __construct(ManagerRegistry $registry, int $commentsDaysBeforeRejectedREmoval)

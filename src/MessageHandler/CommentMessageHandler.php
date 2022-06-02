@@ -2,17 +2,21 @@
 
 namespace App\MessageHandler;
 
-use App\ImageOptimizer;
 use App\SpamChecker;
+use App\ImageOptimizer;
+use Psr\Log\LoggerInterface;
 use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
+use App\Notification\CommentReviewNotification;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Component\Notifier\Recipient\Recipient;
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\Notification\CommentReviewResponseNotification;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class CommentMessageHandler implements MessageHandlerInterface
 {
@@ -26,8 +30,8 @@ final class CommentMessageHandler implements MessageHandlerInterface
         private WorkflowInterface $commentStateMachine,
         private MailerInterface $mailer,
         private ImageOptimizer $imageOptimizer,
-        private string $adminEmail,
         private string $photoDir,
+        private NotifierInterface $notifier,
         private ?LoggerInterface $logger = null
     )
     {
@@ -56,13 +60,7 @@ final class CommentMessageHandler implements MessageHandlerInterface
 
             $this->bus->dispatch($message);
         } elseif ($this->workflow->can($comment, 'publish') || $this->workflow->can($comment, 'publish_ham')) {
-            $this->mailer->send((new NotificationEmail())
-                ->subject('New comment posted')
-                ->htmlTemplate('emails/comment_notification.html.twig')
-                ->from($this->adminEmail)
-                ->to($this->adminEmail)
-                ->context(['comment' => $comment])
-            );
+            $this->notifier->send(new CommentReviewNotification($comment, $message->getReviewUrl()), ...$this->notifier->getAdminRecipients());
         }
         elseif ($this->workflow->can($comment, 'optimize')) {
             if ($comment->getPhotoFilename()) {
@@ -70,6 +68,7 @@ final class CommentMessageHandler implements MessageHandlerInterface
             }
             $this->workflow->apply($comment, 'optimize');
             $this->em->flush();
+            $this->notifier->send(new CommentReviewResponseNotification($comment), new Recipient($comment->getEmail()));
         }
         else {
             $this->logger->debug('Dropping comment message', ['comment' => $comment->getId(), 'state' => $comment->getState()]);

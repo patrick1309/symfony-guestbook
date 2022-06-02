@@ -2,20 +2,23 @@
 
 namespace App\Controller;
 
+use App\SpamChecker;
 use App\Entity\Comment;
 use App\Entity\Conference;
 use App\Form\CommentFormType;
 use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
-use App\SpamChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Notifier\NotifierInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 class ConferenceController extends AbstractController
 {
@@ -23,7 +26,8 @@ class ConferenceController extends AbstractController
         private ConferenceRepository $conferenceRepository,
         private CommentRepository $commentRepository,
         private EntityManagerInterface $em,
-        private MessageBusInterface $bus
+        private MessageBusInterface $bus,
+        private NotifierInterface $notifier
     )
     {
         
@@ -84,12 +88,17 @@ class ConferenceController extends AbstractController
                 'referrer' => $request->headers->get('referer'),
                 'permalink' => $request->getUri(),
             ];
-            $this->bus->dispatch(new CommentMessage($comment->getId(), $context));
+            $reviewUrl = $this->generateUrl('review_comment', ['id' => $comment->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+            $this->bus->dispatch(new CommentMessage($comment->getId(), $reviewUrl, $context));
+
+            $this->notifier->send(new Notification('Thank you for the feedback; your comment will be posted after moderation.', ['browser']));
 
             return $this->redirectToRoute('conference', ['slug' => $conference->getSlug()]);
         }
 
-
+        if ($form->isSubmitted()) {
+            $this->notifier->send(new Notification('Can you check your submission? There are some problems with it.', ['browser']));
+        }
 
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $this->commentRepository->getCommentPaginator($conference, $offset);

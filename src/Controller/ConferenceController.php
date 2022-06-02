@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+#[Route('/{_locale<%app.supported_locales%>}')]
 class ConferenceController extends AbstractController
 {
     public function __construct(
@@ -51,7 +52,7 @@ class ConferenceController extends AbstractController
             'conferences' => $this->conferenceRepository->findAll()
         ]);
 
-        $response->setSharedMaxAge(3600);
+        //$response->setSharedMaxAge(3600);
 
         return $response;
     }

@@ -36,6 +36,7 @@ class CommentFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Comment::class,
+            'translation_domain' => 'forms'
         ]);
     }
 }

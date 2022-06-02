@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="eOy4.6V" resname="Conference Guestbook">
+        <source>Conference Guestbook</source>
+        <target>Livre d'or pour Conférences</target>
+      </trans-unit>
+      <trans-unit id="LNAVleg" resname="Give your feedback!">
+        <source>Give your feedback!</source>
+        <target>Donnez votre avis !</target>
+      </trans-unit>
+      <trans-unit id="3Mg5pAF" resname="View">
+        <source>View</source>
+        <target>Voir</target>
+      </trans-unit>
+      <trans-unit id="ilFYXWP" resname="Add your own feedback">
+        <source>Add your own feedback</source>
+        <target>Ajoutez votre avis</target>
+      </trans-unit>
+      <trans-unit id="maMQz7W" resname="nb_of_comments">
+        <source>nb_of_comments</source>
+        <target>{count, plural, =0 {Aucun commentaire} =1 {1 commentaire} other {# commentaires}}</target>
+      </trans-unit>
+      <trans-unit id="7bokozx" resname="No comments have been posted yet for this conference.">
+        <source>No comments have been posted yet for this conference.</source>
+        <target>Aucun commentaire posté pour cette conférence.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

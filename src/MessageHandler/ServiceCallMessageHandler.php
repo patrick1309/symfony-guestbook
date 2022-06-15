@@ -12,7 +12,6 @@ final class ServiceCallMessageHandler implements MessageHandlerInterface, Servic
 {
     public function __construct(private ContainerInterface $container)
     {
-        
     }
 
     public function __invoke(ServiceCallMessage $message)

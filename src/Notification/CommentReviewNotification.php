@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Notification;
 
@@ -29,7 +29,7 @@ class CommentReviewNotification extends Notification implements EmailNotificatio
         // }
 
         $this->importance(Notification::IMPORTANCE_LOW);
-        
+
         return ['email'];
     }
 
@@ -59,13 +59,10 @@ class CommentReviewNotification extends Notification implements EmailNotificatio
             ->block((new SlackSectionBlock())->text($this->getSubject()))
             ->block(new SlackDividerBlock())
             ->block((new SlackSectionBlock())
-                ->text(sprintf('%s (%s) says: %s', $this->comment->getAuthor(), $this->comment->getEmail(), $this->comment->getText()))
-            )
+                ->text(sprintf('%s (%s) says: %s', $this->comment->getAuthor(), $this->comment->getEmail(), $this->comment->getText())))
             ->block((new SlackActionsBlock())
                 ->button('Accept', $this->reviewUrl, 'primary')
-                ->button('Reject', $this->reviewUrl.'?reject=1', 'danger')
-            )
-        );
+                ->button('Reject', $this->reviewUrl . '?reject=1', 'danger')));
 
         return $message;
     }

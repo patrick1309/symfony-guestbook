@@ -22,7 +22,7 @@ final class ServiceCallMessage
 
     /**
      * Get the value of className
-     */ 
+     */
     public function getClassName()
     {
         return $this->className;
@@ -30,7 +30,7 @@ final class ServiceCallMessage
 
     /**
      * Get the value of methodName
-     */ 
+     */
     public function getMethodName()
     {
         return $this->methodName;
@@ -38,7 +38,7 @@ final class ServiceCallMessage
 
     /**
      * Get the value of params
-     */ 
+     */
     public function getParams()
     {
         return $this->params;

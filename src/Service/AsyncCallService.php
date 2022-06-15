@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -9,9 +9,7 @@ class AsyncCallService
 {
     public function __construct(
         private MessageBusInterface $bus
-    )
-    {
-        
+    ) {
     }
 
     public function async(string $className, string $methodName, array $params)

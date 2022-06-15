@@ -29,9 +29,7 @@ class ConferenceController extends AbstractController
         private EntityManagerInterface $em,
         private MessageBusInterface $bus,
         private NotifierInterface $notifier
-    )
-    {
-        
+    ) {
     }
 
     #[Route('/conference_header', name: 'conference_header')]
@@ -41,7 +39,7 @@ class ConferenceController extends AbstractController
             'conferences' => $this->conferenceRepository->findAll()
         ]);
         $response->setSharedMaxAge(3600);
-        
+
         return $response;
     }
 
@@ -61,20 +59,18 @@ class ConferenceController extends AbstractController
     public function show(
         Request $request,
         Conference $conference,
-        string $photoDir        
-    )
-    {
+        string $photoDir
+    ) {
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setConference($conference);
             if ($photo = $form['photo']->getData()) {
-                $filename = bin2hex(random_bytes(6)).'.'.$photo->guessExtension();
+                $filename = bin2hex(random_bytes(6)) . '.' . $photo->guessExtension();
                 try {
                     $photo->move($photoDir, $filename);
-                }
-                catch (FileException $e) {
+                } catch (FileException $e) {
                     dd($e->getMessage());
                 }
                 $comment->setPhotoFilename($filename);

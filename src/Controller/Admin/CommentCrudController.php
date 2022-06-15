@@ -18,9 +18,7 @@ class CommentCrudController extends AbstractCrudController
 {
     public function __construct(
         private string $photoDir
-    )
-    {
-        
+    ) {
     }
 
     public static function getEntityFqcn(): string
@@ -45,7 +43,7 @@ class CommentCrudController extends AbstractCrudController
         ;
     }
 
-    
+
     public function configureFields(string $pageName): iterable
     {
         yield AssociationField::new('conference');
@@ -58,7 +56,7 @@ class CommentCrudController extends AbstractCrudController
             ->setBasePath('/uploads/photos')
             ->setLabel('Photo')
             ->onlyOnIndex()
-        ;        
+        ;
         yield TextField::new('state');
         $createdAt = DateTimeField::new('createdAt')->setFormTypeOptions([
             'html5' => true,
@@ -71,5 +69,4 @@ class CommentCrudController extends AbstractCrudController
             yield $createdAt;
         }
     }
-    
 }

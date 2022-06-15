@@ -21,16 +21,14 @@ class AdminController extends AbstractController
     public function __construct(
         private EntityManagerInterface $em,
         private MessageBusInterface $bus
-    )
-    {
-        
+    ) {
     }
 
     #[Route('/comment/review/{id}', name: 'review_comment')]
     public function reviewComment(Request $request, Comment $comment, Registry $registry)
     {
         $accepted = !$request->query->get('reject');
-        
+
         $machine = $registry->get($comment);
         if ($machine->can($comment, 'publish')) {
             $transition = $accepted ? 'publish' : 'reject';
@@ -44,7 +42,7 @@ class AdminController extends AbstractController
         $this->em->flush();
 
         if ($accepted) {
-            $reviewUrl = $this->generateUrl('review_comment', ['id' => $comment->getId()],UrlGeneratorInterface::ABSOLUTE_URL);
+            $reviewUrl = $this->generateUrl('review_comment', ['id' => $comment->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
             $this->bus->dispatch(new CommentMessage($comment->getId(), $reviewUrl));
         }
 
@@ -61,7 +59,7 @@ class AdminController extends AbstractController
             return new Response('KO', 400);
         }
 
-        $store->purge($request->getSchemeAndHttpHost().'/'.$uri);
+        $store->purge($request->getSchemeAndHttpHost() . '/' . $uri);
 
         return new Response('Done');
     }

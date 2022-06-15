@@ -61,15 +61,15 @@ class CommentRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-   public function findOneByEmail(string $email): ?Comment
-   {
-       return $this->createQueryBuilder('c')
+    public function findOneByEmail(string $email): ?Comment
+    {
+        return $this->createQueryBuilder('c')
            ->andWhere('c.email = :email')
            ->setParameter('email', $email)
            ->getQuery()
            ->getOneOrNullResult()
-       ;
-   }
+        ;
+    }
 
     public function getCommentPaginator(Conference $conference, int $offset): Paginator
     {
@@ -104,7 +104,7 @@ class CommentRepository extends ServiceEntityRepository
             ->setParameters([
                 'state_rejected' => 'rejected',
                 'state_spam' => 'spam',
-                'date' => new \DateTimeImmutable('-'.$this->commentsDaysBeforeRejectedREmoval.' days'),
+                'date' => new \DateTimeImmutable('-' . $this->commentsDaysBeforeRejectedREmoval . ' days'),
             ])
         ;
     }

@@ -22,7 +22,7 @@ final class CommentMessage
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -30,7 +30,7 @@ final class CommentMessage
 
     /**
      * Get the value of context
-     */ 
+     */
     public function getContext()
     {
         return $this->context;

@@ -13,7 +13,6 @@ class AppFixtures extends Fixture
 {
     public function __construct(private PasswordHasherFactoryInterface $passwordHasherFactory)
     {
-        
     }
 
     public function load(ObjectManager $manager): void
@@ -45,7 +44,7 @@ class AppFixtures extends Fixture
         $comment2->setText('I think this one is going to be moderated.');
         $manager->persist($comment2);
 
-        $admin = new Admin;
+        $admin = new Admin();
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setUsername('admin');
         $admin->setPassword($this->passwordHasherFactory->getPasswordHasher(Admin::class)->hash('password', null));

@@ -18,7 +18,7 @@ class DashboardController extends AbstractDashboardController
     {
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
         $url = $routeBuilder->setController(ConferenceCrudController::class)->generateUrl();
-        
+
         return $this->redirect($url);
 
         // Option 2. You can make your dashboard redirect to different pages depending on the user
